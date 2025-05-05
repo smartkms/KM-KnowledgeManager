@@ -1,5 +1,5 @@
 # KM-Knowledge-Manager
-Clone the repo
+Clone repo
 ``` bash
 git clone https://github.com/smartkms/KM-Knowledge-Manager
 ```
