@@ -4,12 +4,15 @@ Clone the repo
 git clone https://github.com/smartkms/KM-Knowledge-Manager
 ```
 ## Data API with RedisQueue
-1. Move to */collectionEndpoint* and run these commands to clear containers and establish the docker
-**Windows**
+Make sure you have Docker installed.
+
+1. Move to */collectionEndpoint* and run these commands to clear containers and establish the docker:
+
+**On Windows**
 ``` bash
 docker-compose up --build
 ```
-**Linux**
+**On Linux**
 ``` bash
 sudo docker rm -f $(sudo docker ps -aq)
 sudo docker-compose up --build
