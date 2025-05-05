@@ -44,3 +44,4 @@ Make sure you have Docker installed.
   Successfull transfers are displayed on the 1st terminal and end with:
   
   *rqworker    | [Bouncer] Done processing: 'id'*
+  You can add your own JSON files that folow the same format and   name (exampleX.json), currently there are only 3 provided from   Collector.
