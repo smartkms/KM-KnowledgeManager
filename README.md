@@ -17,7 +17,7 @@ The terminal will display RedisQueue jobs and handling
 
 2. Open a new terminal in the same directory and run testJSON.py to test sending JSON data.
 ``` bash
-python3 testJSON.python
+python3 testJSON.py
 ```
 Successfull transfers are displayed on the 1st terminal and end with:
 
