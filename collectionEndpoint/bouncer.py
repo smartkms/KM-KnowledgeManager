@@ -11,7 +11,7 @@ def processData(data: dict):
 
     elif data["typefield"] == "file":
         output = data["content"]["fileLocation"]
-        print(f"Processing file {data['fileName']}...")
+        print(f"Processing file {data['content']['fileName']}...")
         time.sleep(random.randint(1,5)) #simulating
 
     print(f"[Bouncer] Done processing: {data['id']}")
