@@ -3,8 +3,9 @@ Clone repo
 ``` bash
 git clone https://github.com/smartkms/KM-Knowledge-Manager
 ```
-##Query API
+## Query API
 For now its a simple API that only returns back the query.
+
 To test it, install uvicorn in */KM-KnowledgeManager/queryEndpoint* directory:
 ``` bash
 pip install uvicorn
