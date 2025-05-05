@@ -3,6 +3,18 @@ Clone repo
 ``` bash
 git clone https://github.com/smartkms/KM-Knowledge-Manager
 ```
+##Query API
+For now its a simple API that only returns back the query.
+To test it, install uvicorn in */KM-KnowledgeManager/queryEndpoint* directory:
+``` bash
+pip install uvicorn
+```
+and run this command:
+``` bash
+uvicorn queryAPI:app -reload
+```
+A SwaggerUI is established on *http://127.0.0.1:8000/docs*
+where you can test teh API.
 ## Data API with RedisQueue
 Make sure you have Docker installed.
 
