@@ -15,7 +15,8 @@ and run this command in */KM-KnowledgeManager/queryEndpoint* directory
 uvicorn queryAPI:app -reload
 ```
 A SwaggerUI is established on *http://127.0.0.1:8000/docs*
-where you can test teh API.
+where you can test the API.
+
 ## Data API with RedisQueue
 Make sure you have Docker installed.
 
