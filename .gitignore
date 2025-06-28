@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+# database initialization
+milvus_init.yaml
+
+# Docker
+volumes/
+
 # Distribution / packaging
 .Python
 build/
