@@ -1,0 +1,74 @@
+# copy template into milvus_init.yaml
+# CHANGE PASSWORDS IN PRODUCTION!
+milvus:
+  uri: http://localhost:19530
+  token: root:Milvus
+  password: Milvus
+  new-password: rootpsw
+  privilege-groups:
+    write: [ Insert, Delete, Upsert ]
+    read: [ Query, Search ]
+  roles:
+    write_km_data:
+      privileges:
+        write:
+          collection: data
+          db: km
+    read_km_data:
+      privileges:
+        read:
+          collection: data
+          db: km
+  users:
+    - name: reader
+      password: prvread
+      roles: [read]
+    - name: writer
+      password: prvrtr
+      roles: [read, write]
+  databases:
+    km:
+      collections:
+        data:
+          partition-key-settings:
+            num-partitions: 16  # max 1024
+            partitionkey-isolation: True
+            #  TODO add num_shards
+          schema:
+          # TODO add functions to schemas
+            enable-dynamic-field: true
+            # TODO add mmap conf
+            fields:
+            #  TODO complete
+            - name: id
+              type: 21
+              is_primary: true
+              auto_id: true
+              params:
+                max_length: 128
+            - name: embedding
+              type: 101
+              params:
+                dim: 128
+            - name: user
+              type: 21
+              is_partition_key: true
+              params:
+                max_length: 128
+            - name: type
+              type: 21
+              params:
+                max_length: 128
+          indexes:
+          - vector:
+            name: main_indx
+            field-name: embedding
+            type: IVF_SQ8
+            metric-type: COSINE
+            params:
+              nlist: 32
+          - name: id_indx
+            field-name: id
+          - name: type_indx
+            field-name: type
+            type: BITMAP
