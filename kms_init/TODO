@@ -1,0 +1,2 @@
+- Add filename_to schema and in embeddings calculation, add in initialization and in service code
+- Asinhrono klicanje funkcij za embeddinge, da se hitreje naredijo (embed text)
