@@ -24,7 +24,8 @@ class ChannelMessages(BaseModel):
     channelId: str
     messages: list[Message]
 
-class File(BaseModel) : #minIO needs different one
+class File(BaseModel) : 
+    # TODO minIO will pass a different format for files
     fileName: str
     fileLocation: str
 
@@ -36,7 +37,8 @@ class PushRequest(BaseModel):
     content: dict
 
 @app.post("/KM/push")
-def pushData(data : PushRequest):
-    #sends to encoding
+#Sends data for encoding and storing in Milvus DB
+#Data sent is template sensitive
+def push_data(data : PushRequest):
     taskQueue.enqueue(bouncer.processData, data.dict())
     return {"status": "successfully queued", "id": data.id}

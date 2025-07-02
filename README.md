@@ -3,19 +3,19 @@ Clone repo
 ``` bash
 git clone https://github.com/smartkms/KM-Knowledge-Manager
 ```
-## Query API
-For now its a simple API that only returns back the query.
+## Query API for RAG
+Sends queries to the Milvus database with the.
 
 To test it, install uvicorn 
 ``` bash
 pip install uvicorn
 ```
-and run this command in */KM-KnowledgeManager/queryEndpoint* directory
+and run this command in */KM-KnowledgeManager/knowledge_manager/api* directory
 ``` bash
 uvicorn queryAPI:app -reload
 ```
-A SwaggerUI is established on *http://127.0.0.1:8000/docs*
-where you can test the API.
+A SwaggerUI is established on `http://127.0.0.1:8000/docs`
+where you can test the API or just make a post request at `http://localhost:8000/KM/query` in your code.
 
 ## Data API with RedisQueue
 Make sure you have Docker installed.
@@ -28,7 +28,6 @@ Make sure you have Docker installed.
   ```
   **On Linux**
   ``` bash
-  sudo docker rm -f $(sudo docker ps -aq)
   sudo docker-compose up --build
   ```
   If the queue sets up correctly you should see:
