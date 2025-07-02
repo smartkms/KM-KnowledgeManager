@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from database.db_service import query
+from database.db_service import isci_zapise
 
 app = FastAPI()
 
@@ -11,5 +11,5 @@ class QueryRequest(BaseModel):
 @app.post("/KM/query")
 #Sends query to MilvusDB and returns search results
 def query_request(request : QueryRequest):
-    output = query(request.text)
+    output = isci_zapise(request.text)
     return {"results": output}

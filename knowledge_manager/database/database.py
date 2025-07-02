@@ -1,38 +1,15 @@
-
-from langchain_milvus import BM25BuiltInFunction, Milvus
-from embedding_openai import embeddings, embed_text
-# from kms_db import use_local_db
+from .embedding_openai import embeddings, embed_text
 from dotenv import load_dotenv
 import os
+from pymilvus import MilvusClient
 
-use_local_db = True
+use_local_db = False
 load_dotenv()
 # TODO preverit kako se najboljse poda skupek sporocikl ai modelu
 # TODO RBAC
 
-if use_local_db:
-    LocalDBURI = "./milvus_local.db"
-    vectorstore = Milvus(
-        embedding_function=embeddings,
-        connection_args={"uri": LocalDBURI},
-        index_params={"index_type": "FLAT", "metric_type": "L2"},
-        collection_name="vectorstore_demo",
-        drop_old=False,
-        auto_id=True,
-        primary_field="pk"
-    )
-else:
-    URI = os.getenv("VECTOR_DB_URI")
-    vectorstore = Milvus(
-        embedding_function=embeddings,
-        connection_args={"uri": URI, "token": "root:Milvus", "db_name": "milvus_demo"},
-        index_params={"index_type": "FLAT", "metric_type": "L2"},
-        consistency_level="Strong",
-        drop_old=False,  # set to True if seeking to drop the collection with that name if it exists
-        collection_name="vectorstore_demo",
-        auto_id=True,
-        primary_field="pk"
-    )
+URI = os.getenv("VECTOR_DB_URI")
+milvus_client = MilvusClient(uri=URI, token="root:Milvus", db_name="km")
 # print("db_init ok")
 
 # def func():
@@ -48,16 +25,18 @@ else:
 # TODO hrani embeddinge in podatke v lokalnem datoteki, da jih lahko loadas
 
 # TODO razsiri na vec zapisov z istimi metapodatki hkrati
-def shrani_podatke(tekst: str, metapodatki: dict[str, any]):
-    # TODO preveri, ali je vredno zapis shraniti (check insert funkcija), in kaj zbrisati
-    # TODO spremeni VectorMetadata v slovar
-    vektor = embed_text(tekst)
-    # print("embed ok")
-    return vectorstore.add_embeddings(texts=[tekst], embeddings=[vektor], metadatas=[metapodatki])
+# def shrani_podatke(tekst: str, metapodatki: dict[str, any]):
+#     # TODO preveri, ali je vredno zapis shraniti (check insert funkcija), in kaj zbrisati
+#     # TODO spremeni VectorMetadata v slovar
+#     vektor = embed_text(tekst)
+#     # print("embed ok")
+#     return vectorstore.add_embeddings(texts=[tekst], embeddings=[vektor], metadatas=[metapodatki])
 
 def isci_zapise(tekst: str):
     # TODO preveri tipe iskanja, dodaj iskanje preko metapodatkov kot dodatnih filtrov
-    res = vectorstore.similarity_search(tekst)
+    vector = embed_text(tekst)
+    print("Vector size: " + str(vector.__len__()))
+    res = milvus_client.search(collection_name="data", data=[vector], limit=2, output_fields=["text"], filter="user == \"test\"")
     return res
 
 # def func_test():
