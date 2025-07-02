@@ -24,7 +24,7 @@ def split_onheaders(text: str) -> list[documents.Document]:
 ### TODO much more eror handling
 def splitfile(stream : BinaryIO, filename : str) -> list[str]:
     _, extension = os.path.splitext(filename)
-    print(extension)
+    # print(extension)
     if extension == ".pdf":
         text = convert_pdf(stream)
     elif extension in [".docx", ".xslx", ".pptx"]:
