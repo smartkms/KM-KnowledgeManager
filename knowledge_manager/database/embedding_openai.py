@@ -24,12 +24,13 @@ embeddings = OpenAIEmbeddings(
     # With the `text-embedding-3` class
     # of models, you can specify the size
     # of the embeddings you want returned.
-    # dimensions=1024
+    dimensions=1024
 )
 
 # Tak zgledad zdaj funkcija za embedding, to 
 # TODO dodati check tokenov, òe je text predolg, se sprozi exeption
 def embed_text(txt : str) :
+    print("Embedding "+ txt)
     return embeddings.embed_query(txt)
 
 # Primer uporabe embeddinga, da se preveri, ali je model pravilno konfiguriran

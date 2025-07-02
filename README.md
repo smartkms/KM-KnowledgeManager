@@ -29,14 +29,11 @@ python3 init_db.py
 
 ## Query API
 For now its a simple API that only returns back the query.
-
-To test it, install uvicorn 
-``` bash
-pip install uvicorn
-```
-and run this command in */KM-KnowledgeManager/queryEndpoint* directory
-``` bash
-uvicorn queryAPI:app -reload
+From project root:
+```bash
+cd knowledge_manager
+pip install -r requirements.txt
+uvicorn --reload queryAPI:app
 ```
 A SwaggerUI is established on *http://127.0.0.1:8000/docs*
 where you can test the API.

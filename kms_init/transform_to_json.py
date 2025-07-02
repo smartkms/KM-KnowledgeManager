@@ -51,10 +51,6 @@ def transform_doc_to_json(populate):
                         logger.fatal("Could not create file %s: %s", json_name, e)
                 except FileNotFoundError as e:
                     logger.fatal("Folder %s not found.", folder_name)
-                
-
-    except FileNotFoundError:
-        logger.fatal("Error: %s not found.", config_file)
     except yaml.YAMLError as e:
         logger.fatal("Error: Invalid YAML format - %s", e)
     except KeyError as e:
