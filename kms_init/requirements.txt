@@ -1,0 +1,7 @@
+langchain-core==0.3.59
+langchain-openai==0.3.14
+langchain-text-splitters==0.3.8
+markitdown==0.1.1
+pymilvus == 2.5.11
+pymupdf4llm==0.0.24
+python-dotenv==1.1.0

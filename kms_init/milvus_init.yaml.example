@@ -4,7 +4,7 @@ milvus:
   uri: http://localhost:19530
   token: root:Milvus
   password: Milvus
-  new-password: rootpsw
+  new-password: Milvus
   privilege-groups:
     write: [ Insert, Delete, Upsert ]
     read: [ Query, Search ]
@@ -30,6 +30,7 @@ milvus:
     km:
       collections:
         data:
+          drop-old: true
           partition-key-settings:
             num-partitions: 16  # max 1024
             partitionkey-isolation: True
@@ -49,7 +50,7 @@ milvus:
             - name: embedding
               type: 101
               params:
-                dim: 128
+                dim: 1024
             - name: user
               type: 21
               is_partition_key: true
@@ -59,6 +60,11 @@ milvus:
               type: 21
               params:
                 max_length: 128
+            - name: text
+              type: 21
+              params:
+                max_length: 64000
+                mmap_enabled: true
           indexes:
           - vector:
             name: main_indx
@@ -72,3 +78,24 @@ milvus:
           - name: type_indx
             field-name: type
             type: BITMAP
+
+# TODO for each folder list all relevant fields or schema
+# now it uses the standard schema wich should be improved
+populate:
+  clients:
+    km_data:
+      token: writer:prvrtr
+      db: km
+      # TODO set to true for end users
+      folders:
+        ministrstvo_za_kmetijstvo:
+          skip_transform: true
+          collection: data
+          user: test
+          type: DOCUMENT
+        skipped_folder:
+          skip_transform: true
+          collection: data
+          user: test
+          type: DOCUMENT
+          # TODO add relevant metadata autodiscover metadata, give name of index vector field, text field
