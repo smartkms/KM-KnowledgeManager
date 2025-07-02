@@ -2,7 +2,8 @@ from pymilvus import __version__ as MILVUS_VERSION, MilvusClient, MilvusExceptio
 from pymilvus.exceptions import *
 from common.logger import getLogger
 import yaml
-from time import sleep
+from transform_to_json import transform_doc_to_json
+from populate_db import populate_milvus_db
 
 # TODO if old db still exists create Y/N option to drop it and create new, same for schemas
 # TODO update mode for collection add config property milvus.update
@@ -17,8 +18,12 @@ logger.info("pymilvus version - %s", MILVUS_VERSION)
 def create_collections(collections, client) :
     for collection_name, collection in collections.items():
         if client.has_collection(collection_name):
-            logger.info("Collection %s already exists.", collection_name)
-            continue
+            if collection["drop-old"]:
+                client.drop_collection(collection_name=collection_name)
+                logger.warning("Dropping existing collection %s, creating new.", collection_name)
+            else:
+                logger.info("Collection %s already exists, skipping creation.", collection_name)
+                continue
         try:
             try:
                 schema_data = collection["schema"]
@@ -97,6 +102,7 @@ def create_privilege_groups(client, privilege_groups):
     for name, privileges in privilege_groups.items():
         try:
             if name in list(map(lambda d: d['privilege_group'], client.list_privilege_groups())):
+                logger.info("Privilege_group %s already exists.", name)
                 continue
             print(name in client.list_privilege_groups())
             client.create_privilege_group(group_name=name)
@@ -111,6 +117,7 @@ def create_privilege_groups(client, privilege_groups):
 def create_roles(client, roles) :
     for role_name, privileges in roles.items():
         if role_name in client.list_roles():
+            logger.info("Role %s already exists.", role_name)
             continue
         try:
             client.create_role(role_name=role_name)
@@ -134,6 +141,7 @@ def create_roles(client, roles) :
 def create_users(client, users) :
     for user in users:
         if user["name"] in client.list_users():
+            logger.info("User %s already exists.", user["name"])
             continue
         try:
             client.create_user(user_name=user["name"], password=user["password"])
@@ -154,19 +162,6 @@ try:
     token = milvus["token"]
     try:
         client =  MilvusClient(uri=uri, token=token)
-        # print(client.list_users())
-        # for name in client.list_users():
-        #     if name=="root":
-        #         continue
-        #     client.drop_user(name)
-        # print(client.list_roles())
-        # for name in client.list_roles():
-        #     if name =="admin":
-        #         continue
-        #     client.drop_privilege_group(name)
-        # print(client.list_privilege_groups())
-        # for name in client.list_privilege_groups():
-        #     client.drop_privilege_group(name)
         for database_name, database in milvus["databases"].items():
             if not database_name in client.list_databases():
                 client.create_database(database_name)
@@ -184,7 +179,9 @@ try:
         logger.fatal("Error creating milvus client: %s", e)
     finally:
         client.close()
-    client.close()
+    
+    transform_doc_to_json(config["populate"])
+    populate_milvus_db(config=config)
 except FileNotFoundError:
     logger.fatal("Error: %s not found.", CONFIG_FILE)
 except yaml.YAMLError as e:
