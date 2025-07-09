@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from knowledge_manager.database.db_search import isci_zapise
+from database.db_search import isci_zapise
 
 app = FastAPI()
 
