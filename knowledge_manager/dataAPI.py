@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from redis import Redis
 from rq import Queue
 import os
-import bouncer
+import collectionEndpoint.bouncer as bouncer
 
 app = FastAPI()
 

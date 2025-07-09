@@ -1,6 +1,6 @@
 import time
 import random
-from knowledge_manager.database.db_service import store_text, store_pdf_files, store_msoffice_files
+from knowledge_manager.database.db_store import store_text, store_pdf_files, store_msoffice_files
 
 def processData(data: dict):
     print(f"[Bouncer] Received: {data['id']}")
