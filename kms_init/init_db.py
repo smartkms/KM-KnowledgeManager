@@ -32,7 +32,7 @@ def create_collections(collections, client) :
                     field_schema = FieldSchema.construct_from_dict(field)
                     fields.append(field_schema.to_dict())
                 schema_dict = {
-                    "enable-dynamic-field": schema_data["enable-dynamic-field"],
+                    "enable_dynamic_field": schema_data["enable-dynamic-field"],
                     "fields" : fields
                 }
                 schema = CollectionSchema.construct_from_dict(schema_dict)

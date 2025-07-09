@@ -93,9 +93,3 @@ populate:
           collection: data
           user: test
           type: DOCUMENT
-        skipped_folder:
-          skip_transform: true
-          collection: data
-          user: test
-          type: DOCUMENT
-          # TODO add relevant metadata autodiscover metadata, give name of index vector field, text field
