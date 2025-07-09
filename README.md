@@ -16,7 +16,7 @@ From root of project:
 cd docker
 docker compose up -d
 ```
-Milvus should be running on `localhost:19530`. User interface is on `localhost:9091`.
+Milvus should be running on `localhost:19530`. User interface is on `localhost:9091/webui`.
 
 ### Initialize and populate database
 In `kms_ini` folder rename `milvus_init.yaml.example` to `milvus_init.yaml`.

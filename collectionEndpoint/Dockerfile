@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the FastAPI app and worker files
 COPY . .
+COPY ../knowledge_manager/ .
 
 # Expose port for FastAPI
 EXPOSE 8000
