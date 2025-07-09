@@ -1,6 +1,6 @@
 import os
 import requests
-from knowledge_manager.database.db_service import store_text, store_pdf_files, store_msoffice_files
+from database.db_store import store_text, store_pdf_files, store_msoffice_files
 
 def file_download(link: str):
     file = requests.get(link)

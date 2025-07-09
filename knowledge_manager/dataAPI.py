@@ -4,7 +4,7 @@ from redis import Redis
 from rq import Queue
 from datetime import datetime
 import os
-import bouncer
+import collectionEndpoint.bouncer as bouncer
 
 app = FastAPI()
 
