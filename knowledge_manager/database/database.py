@@ -25,12 +25,12 @@ milvus_client = MilvusClient(uri=URI, token="root:Milvus", db_name="km")
 # TODO hrani embeddinge in podatke v lokalnem datoteki, da jih lahko loadas
 
 # TODO razsiri na vec zapisov z istimi metapodatki hkrati
-# def shrani_podatke(tekst: str, metapodatki: dict[str, any]):
-#     # TODO preveri, ali je vredno zapis shraniti (check insert funkcija), in kaj zbrisati
-#     # TODO spremeni VectorMetadata v slovar
-#     vektor = embed_text(tekst)
-#     # print("embed ok")
-#     return vectorstore.add_embeddings(texts=[tekst], embeddings=[vektor], metadatas=[metapodatki])
+def shrani_podatke(tekst: str, metapodatki: dict[str, any]):
+    # TODO preveri, ali je vredno zapis shraniti (check insert funkcija), in kaj zbrisati
+    # TODO spremeni VectorMetadata v slovar
+    vektor = embed_text(tekst)
+    # print("embed ok")
+    return vectorstore.add_embeddings(texts=[tekst], embeddings=[vektor], metadatas=[metapodatki])
 
 def isci_zapise(tekst: str):
     # TODO preveri tipe iskanja, dodaj iskanje preko metapodatkov kot dodatnih filtrov
