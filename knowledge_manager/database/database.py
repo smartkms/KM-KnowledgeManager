@@ -9,9 +9,9 @@ load_dotenv()
 # TODO preverit kako se najboljse poda skupek sporocikl ai modelu
 # TODO RBAC
 
-URI = os.getenv("VECTOR_DB_URI")
-TOKEN = os.getenv("VECTOR_DB_TOKEN")
-DB_NAME = os.getenv("VECTOR_DB_NAME")
+URI = os.getenv("VECTOR_DB_URI", "http://localhost:19530")
+TOKEN = os.getenv("VECTOR_DB_TOKEN", "root:Milvus")
+DB_NAME = os.getenv("VECTOR_DB_NAME", "db")
 
 DEFAULT_COLLECTION_NAME="data"
 # TODO import various collections from yaml config file

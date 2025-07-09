@@ -72,3 +72,5 @@ Make sure you have Docker installed.
 ## Usage
 ### Database package
 The only methods for external use from database package are those defined and documented in db_service. All the other are for **internal use** only.
+
+Check `demo.py` to see examples of usage.
