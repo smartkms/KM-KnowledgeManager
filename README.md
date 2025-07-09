@@ -9,6 +9,8 @@ In root directory create `.env` file. Declare the following variables:
 ```ini
 OPENAI_API_KEY=my-secret-key
 VECTOR_DB_URI=http://localhost:19530
+VECTOR_DB_TOKEN=root:Milvus
+VECTOR_DB_NAME=km
 ```
 ### Local docker instance of milvus
 From root of project:
@@ -66,3 +68,7 @@ Make sure you have Docker installed.
   *rqworker    | [Bouncer] Done processing: 'id'*
   
   You can add your own JSON files that folow the same format and   name (exampleX.json), currently there are only 3 provided from   the Collector.
+
+## Usage
+### Database package
+The only methods for external use from database package are those defined and documented in db_service. All the other are for **internal use** only.
