@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 from redis import Redis
 from rq import Queue
+from datetime import datetime
 import os
-import bouncer
+import collectionEndpoint.bouncer as bouncer
 
 app = FastAPI()
 
@@ -27,13 +28,13 @@ class ChannelMessages(BaseModel):
 class File(BaseModel) : 
     # TODO minIO will pass a different format for files
     fileName: str
-    fileLocation: str
+    fileLocation: HttpUrl
 
 class PushRequest(BaseModel):
     typefield: str
     platform: str
     id: str
-    timestamp: str
+    timestamp: datetime
     content: dict
 
 @app.post("/KM/push")
