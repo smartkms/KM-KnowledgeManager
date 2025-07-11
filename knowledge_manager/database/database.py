@@ -2,12 +2,13 @@ from .embedding_openai import embed_text
 from dotenv import load_dotenv
 import os
 from pymilvus import MilvusClient
+from typing import List
+from models import FileMetadata, FileType, BaseEntity
 
 use_local_db = False
 load_dotenv()
 
-# TODO preverit kako se najboljse poda skupek sporocikl ai modelu
-# TODO RBAC
+# TODO preverit kako se najboljse poda skupek sporocil ai modelu
 
 URI = os.getenv("VECTOR_DB_URI", "http://localhost:19530")
 TOKEN = os.getenv("VECTOR_DB_TOKEN", "root:Milvus")
@@ -26,9 +27,56 @@ milvus_client = MilvusClient(uri=URI, token=TOKEN, db_name=DB_NAME)
 # TODO preveri tipe iskanja, dodaj iskanje preko metapodatkov kot dodatnih filtrov, validate filter expressions
 # TODO preveri, ali je vredno zapis shraniti (check insert funkcija), in kaj zbrisati
 # TODO razsiri na vec zapisov z istimi metapodatki hkrati List(str) | str
+# TODO select outputfields to return, avoid vectors
 
 # V2 APIs
+def store_data_v2(text : str, metadata : FileMetadata,  position : int = 0) -> List[str]:
+    embedding=embed_text(text)
+    entity = metadata.model_copy(
+        update={
+            "text" : text,
+            "embedding" : embedding,
+            "position" : position
+        },
+        deep=True
+    )
+    res = milvus_client.insert(collection_name=COLLECTION_NAME, data=entity.model_dump)
+    return res["ids"]
 
+# TODO add offset and limit
+# adds user to filtering, user should be specified and validated in resource class
+def search_data_v2(query : str, type : FileType | None = None, source : str | None = None, user : str = "public") -> List[BaseEntity]:
+    filter_expression_list = ["user == {user} "]
+    filter_params = {
+        "user" : user
+    }
+    if type != None:
+        filter_expression_list.append(" AND type == {type}")
+        filter_params["type"] = type
+    if source != None:
+        filter_expression_list.append(" AND source == {source}")
+        filter_params["source"] = source
+    filter_expression = ' '.join(filter_expression_list)
+    embedding = embed_text(query)
+    res = milvus_client.search(collection_name=COLLECTION_NAME, data=embedding, output_fields=["*"], filter=filter_expression, filter_params=filter_params)
+    return list(map(res[0], lambda entity : BaseEntity.model_validate(entity)))
+
+# searches only by scalar
+# TODO validate parameters (should not contain spaces)
+def search_data(type : FileType | None = None, source : str | None = None, user : str = "public") -> List[BaseEntity]:
+    filter_expression_list = ["user == {user} "]
+    filter_params = {
+        "user" : user
+    }
+    if type != None:
+        filter_expression_list.append(" AND type == {type}")
+        filter_params["type"] = type
+    if source != None:
+        filter_expression_list.append(" AND source == {source}")
+        filter_params["source"] = source
+    filter_expression = ' '.join(filter_expression_list)
+    res = milvus_client.query(collection_name=COLLECTION_NAME, output_fields=["*"], filter=filter_expression, filter_params=filter_params)
+    return list(map(res[0], lambda entity : BaseEntity.model_validate(entity)))
 
 # V1 apis, will be replaced by API's using Models as parameters and having additional parameters
 @DeprecationWarning
@@ -50,7 +98,7 @@ def isci_zapise(tekst: str):
     vector = embed_text(tekst)
     print("Vector size: " + str(vector.__len__()))
     res = milvus_client.search(collection_name=COLLECTION_NAME, data=[vector], limit=2, output_fields=["text", "id", "$meta", "user", "type"], filter="user == \"test\"")
-    return res
+    return res[0]
     # Example return (is list of list, $meta dynamic field will be split to its components):
     # [[
     #     {
