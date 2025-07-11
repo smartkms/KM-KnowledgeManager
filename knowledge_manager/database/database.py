@@ -11,7 +11,7 @@ load_dotenv()
 
 URI = os.getenv("VECTOR_DB_URI", "http://localhost:19530")
 TOKEN = os.getenv("VECTOR_DB_TOKEN", "root:Milvus")
-DB_NAME = os.getenv("VECTOR_DB_NAME", "db")
+DB_NAME = os.getenv("VECTOR_DB_NAME", "km")
 
 DEFAULT_COLLECTION_NAME="data"
 # TODO import various collections from yaml config file
