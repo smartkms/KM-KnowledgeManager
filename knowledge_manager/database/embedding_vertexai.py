@@ -18,5 +18,5 @@ if "GOOGLE_API_KEY" not in os.environ:
 # Initialize the a specific Embeddings Model version
 embeddings = VertexAIEmbeddings(model_name="text-embedding-004")
 
-vektor =  embeddings.embed(["I like pizza."])
-print(vektor)
+def embed_text(txt : str) :
+    return embeddings.embed_query(txt)
