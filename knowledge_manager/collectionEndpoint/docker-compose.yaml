@@ -12,25 +12,17 @@ services:
 
   # FastAPI service
   fastapi:
-    build: .
-    container_name: fastapi
+    build:
+      context: ../
+      dockerfile: collectionEndpoint/Dockerfile
+    container_name: data-api
     ports:
       - "8000:8000"
     depends_on:
       - redis
-    environment:
-      - REDIS_HOST=redis
 
-  # RQ Worker service
-  rqworker:
-    build: .
-    container_name: rqworker
-    command: rq worker processing --with-scheduler
-    depends_on:
-      - fastapi
-      - redis
-    environment:
-      - REDIS_HOST=redis
+    extra_hosts:
+      host.docker.internal: host-gateway  # refrences host machine
 
 volumes:
   redis-data:
