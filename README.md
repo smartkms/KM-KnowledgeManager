@@ -34,9 +34,17 @@ Sends queries to the Milvus database.
 From project root:
 ```bash
 cd knowledge_manager
-pip install -r requirements.txt
+python3 -m venv ragEndpoint/.venvQueryApi
+source ragEndpoint/.venvQueryApi/bin/activate
+pip install -r ragEndpoint/requirements.txt
 uvicorn --reload queryAPI:app
 ```
+**Notes**
+
+Comment out @DeprecationWarning tag in the file knowledge_manager/database/database.py, above the function isci_zapise, if you recieve an unexpected error.
+
+**Test**
+
 A SwaggerUI is established on `http://127.0.0.1:8000/docs`
 where you can test the API or just make a post request at `http://localhost:8000/KM/query` in your code.
 
