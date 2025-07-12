@@ -16,14 +16,4 @@ def split_onlength(text: str) -> list[str] :
 
 def split_onheaders(text: str) -> list[documents.Document]:
     return splitterh.split_text(text=text)
-
-# from pdf_reader import convert_pdf
-# from ms_reader import convert_ms
-# file = open("a.pdf", mode="rb")
-# text = convert_pdf(file)
-# splitext = splitter.split_text(text=text)
-# splitexth = splitterh.split_text(text=text)
-
-# print(splitext[0:2])
-# print('\n')
-# print(splitexth[0:4])
+    # returns Document, documents should be converted to str

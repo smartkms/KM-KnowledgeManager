@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from pymilvus import MilvusClient
 from typing import List
-from models import FileMetadata, FileType, BaseEntity
+from .models import FileMetadata, FileType, BaseEntity
 
 use_local_db = False
 load_dotenv()
@@ -18,6 +18,7 @@ DEFAULT_COLLECTION_NAME="data"
 # TODO import various collections from yaml config file
 COLLECTION_NAME = "data"
 
+# TODO not use same client for read and write
 milvus_client = MilvusClient(uri=URI, token=TOKEN, db_name=DB_NAME)
 
 # Important
@@ -40,10 +41,11 @@ def store_data_v2(text : str, metadata : FileMetadata,  position : int = 0) -> L
         },
         deep=True
     )
-    res = milvus_client.insert(collection_name=COLLECTION_NAME, data=entity.model_dump)
+    res = milvus_client.insert(collection_name=COLLECTION_NAME, data=entity.model_dump())
     return res["ids"]
 
 # TODO add offset and limit
+# TODO can erturn similarity to query vector, can implement something about it
 # adds user to filtering, user should be specified and validated in resource class
 def search_data_v2(query : str, type : FileType | None = None, source : str | None = None, user : str = "public") -> List[BaseEntity]:
     filter_expression_list = ["user == {user} "]
@@ -58,12 +60,12 @@ def search_data_v2(query : str, type : FileType | None = None, source : str | No
         filter_params["source"] = source
     filter_expression = ' '.join(filter_expression_list)
     embedding = embed_text(query)
-    res = milvus_client.search(collection_name=COLLECTION_NAME, data=embedding, output_fields=["*"], filter=filter_expression, filter_params=filter_params)
-    return list(map(res[0], lambda entity : BaseEntity.model_validate(entity)))
+    res = milvus_client.search(collection_name=COLLECTION_NAME, data=[embedding], output_fields=["*"], filter=filter_expression, filter_params=filter_params)
+    return list(map(lambda entity : BaseEntity.model_validate(entity["entity"]), res[0]))
 
 # searches only by scalar
 # TODO validate parameters (should not contain spaces)
-def search_data(type : FileType | None = None, source : str | None = None, user : str = "public") -> List[BaseEntity]:
+def query_data_v2(type : FileType | None = None, source : str | None = None, user : str = "public") -> List[BaseEntity]:
     filter_expression_list = ["user == {user} "]
     filter_params = {
         "user" : user
@@ -76,7 +78,16 @@ def search_data(type : FileType | None = None, source : str | None = None, user 
         filter_params["source"] = source
     filter_expression = ' '.join(filter_expression_list)
     res = milvus_client.query(collection_name=COLLECTION_NAME, output_fields=["*"], filter=filter_expression, filter_params=filter_params)
-    return list(map(res[0], lambda entity : BaseEntity.model_validate(entity)))
+    return list(map(lambda entity : BaseEntity.model_validate(entity), res))
+
+def query_data_by_id_v2(ids : List[str], user : str = "public") -> List[BaseEntity]:
+    filter_expression = "user == {user} AND id IN {ids}"
+    filter_params = {
+        "user" : user,
+        "ids" : ids
+    }
+    res = milvus_client.query(collection_name=COLLECTION_NAME, output_fields=["*"], filter=filter_expression, filter_params=filter_params)
+    return list(map(lambda entity : BaseEntity.model_validate(entity), res))
 
 # V1 apis, will be replaced by API's using Models as parameters and having additional parameters
 @DeprecationWarning
