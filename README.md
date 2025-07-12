@@ -50,13 +50,16 @@ Make sure you have Docker installed.
 **2.** Run the dataAPI:
 ```bash
  cd ..
+ python3 -m venv collectionEndpoint/.venvDataApi
+ source collectionEndpoint/.venvDataApi/bin/activate
+ pip install -r collectionEndpoint/requirements.txt
  uvicorn dataAPI:app
 
 ```
 
 **3.** Tests
 - 1st test: You can test the api on *http://127.0.0.1:8000/docs*
-- 2nd test: Open a new terminal in the *KM-Knowledge-Manager/knowledge_manager/collectionEndpoint* directory and run testJSON.py to test sending JSON data.
+- 2nd test: Open a new terminal in the *KM-Knowledge-Manager/knowledge_manager/collectionEndpoint/Tests* directory and run testJSON.py to test sending JSON data.
   ``` bash
   python testJSON.py
   ```
