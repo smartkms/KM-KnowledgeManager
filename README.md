@@ -29,14 +29,37 @@ pip install -r requirements.txt
 python3 init_db.py
 ```
 
+## Run server with docker compose
+1. first run, intilize and populate the database(instructions above)
+2. move to folder knowledge_manager
+3. Fill in required fields in *.env.example*
+4. rename *.env.example* to *.env*
+5. run *docker compose up*
+
+Everything should be working now.
+
+**DataApi**, is used to push new data to the database. It interfaces with the **collector**.
+
+**QueryApi** is used for searching through the database. It should interface with the **rag** service.
+
+Bellow you will find test, to confirm that both query and data api are working. Make sure to replace the ports, with the ones in the .env file.
+
 ## Query API for RAG
 Sends queries to the Milvus database.
 From project root:
 ```bash
 cd knowledge_manager
-pip install -r requirements.txt
+python3 -m venv ragEndpoint/.venvQueryApi
+source ragEndpoint/.venvQueryApi/bin/activate
+pip install -r ragEndpoint/requirements.txt
 uvicorn --reload queryAPI:app
 ```
+**Notes**
+
+Comment out @DeprecationWarning tag in the file knowledge_manager/database/database.py, above the function isci_zapise, if you recieve an unexpected error. (If running in docker, make sure to rebuild)
+
+**Test**
+
 A SwaggerUI is established on `http://127.0.0.1:8000/docs`
 where you can test the API or just make a post request at `http://localhost:8000/KM/query` in your code.
 
@@ -50,13 +73,16 @@ Make sure you have Docker installed.
 **2.** Run the dataAPI:
 ```bash
  cd ..
+ python3 -m venv collectionEndpoint/.venvDataApi
+ source collectionEndpoint/.venvDataApi/bin/activate
+ pip install -r collectionEndpoint/requirements.txt
  uvicorn dataAPI:app
 
 ```
 
 **3.** Tests
 - 1st test: You can test the api on *http://127.0.0.1:8000/docs*
-- 2nd test: Open a new terminal in the *KM-Knowledge-Manager/knowledge_manager/collectionEndpoint* directory and run testJSON.py to test sending JSON data.
+- 2nd test: Open a new terminal in the *KM-Knowledge-Manager/knowledge_manager/collectionEndpoint/Tests* directory and run testJSON.py to test sending JSON data.
   ``` bash
   python testJSON.py
   ```

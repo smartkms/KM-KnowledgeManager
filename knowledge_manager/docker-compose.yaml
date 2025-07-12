@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Redis service
+  redis:
+    image: redis:latest
+    ports:
+      - "${REDIS_HOST_PORT}:6379"
+    volumes:
+      - redis-data:/data
+
+  data-api:
+    build:
+      context: .
+      dockerfile: collectionEndpoint/Dockerfile
+    ports:
+      - "${DATA_API_PORT}:8000"
+    depends_on:
+      - redis
+
+    extra_hosts:
+      host.docker.internal: host-gateway  # refrences host machine
+
+  query-api:
+    build:
+      context: .
+      dockerfile: ragEndpoint/Dockerfile
+    ports:
+      - "${QUERY_API_PORT}:8000"
+    depends_on:
+      - redis
+
+    extra_hosts:
+      host.docker.internal: host-gateway  # refrences host machine
+
+volumes:
+  redis-data:
