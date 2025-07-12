@@ -2,7 +2,7 @@ from langchain_text_splitters import MarkdownTextSplitter, MarkdownHeaderTextSpl
 from langchain_core import documents
 from .ms_reader import convert_ms
 from .pdf_reader import convert_pdf
-from ..common.logger import getLogger
+from common.logger import getLogger
 from typing import BinaryIO
 import os
 

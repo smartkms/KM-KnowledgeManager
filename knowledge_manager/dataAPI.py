@@ -9,7 +9,8 @@ import collectionEndpoint.bouncer as bouncer
 app = FastAPI()
 
 redisHost = os.getenv('REDIS_HOST', 'localhost')
-redisConnect = Redis(host=redisHost, port=6379)
+redisHostPort = os.getenv('REDIS_HOST_PORT', 6379)
+redisConnect = Redis(host=redisHost, port=redisHostPort)
 taskQueue = Queue('processing', connection=redisConnect)
 
 class User(BaseModel):
