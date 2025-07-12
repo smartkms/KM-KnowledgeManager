@@ -26,6 +26,8 @@ EXPOSE 8000
 
 ENV OPENAI_API_KEY="wow"
 ENV VECTOR_DB_URI=http://host.docker.internal:19530
+ENV REDIS_HOST=host.docker.internal
+ENV REDIS_HOST_PORT=6379
 
 # Command to run FastAPI app
 CMD ["uvicorn", "dataAPI:app", "--host", "0.0.0.0", "--port", "8000"]
