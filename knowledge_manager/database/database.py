@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from pymilvus import MilvusClient
 from typing import List
-from .models import FileMetadata, FileType, BaseEntity
+from .models import FileMetadata, BaseEntity
 from . import MILVUS_PUBLIC_USER
 
 use_local_db = False
@@ -23,7 +23,7 @@ COLLECTION_NAME = "data"
 milvus_client = MilvusClient(uri=URI, token=TOKEN, db_name=DB_NAME)
 
 # Important
-# TODO v2 apis for calling database, change existing to use pymilvus
+# TODO v2 apis for calling database
 
 # Features to implement (not urgent):
 # TODO preveri tipe iskanja, dodaj iskanje preko metapodatkov kot dodatnih filtrov, validate filter expressions
@@ -49,7 +49,7 @@ def store_data_v2(text : str, metadata : FileMetadata,  position : int = 0) -> L
 # TODO add offset and limit
 # TODO can erturn similarity to query vector, can implement something about it
 # adds user to filtering, user should be specified and validated in resource class
-def search_data_v2(query : str, type : FileType | None = None, source : str | None = None, user : str = MILVUS_PUBLIC_USER) -> List[BaseEntity]:
+def search_data_v2(query : str, type : str | None = None, source : str | None = None, user : str = MILVUS_PUBLIC_USER) -> List[BaseEntity]:
     filter_expression_list = ["user == {user} "]
     filter_params = {
         "user" : user
@@ -67,7 +67,7 @@ def search_data_v2(query : str, type : FileType | None = None, source : str | No
 
 # searches only by scalar
 # TODO validate parameters (should not contain spaces)
-def query_data_v2(type : FileType | None = None, source : str | None = None, user : str = MILVUS_PUBLIC_USER) -> List[BaseEntity]:
+def query_data_v2(type : str | None = None, source : str | None = None, user : str = MILVUS_PUBLIC_USER) -> List[BaseEntity]:
     filter_expression_list = ["user == {user} "]
     filter_params = {
         "user" : user
@@ -103,7 +103,7 @@ def shrani_podatke(tekst: str, metapodatki: dict[str, any]):
     if is_new:
         res = milvus_client.insert(collection_name=COLLECTION_NAME, data=metapodatki)
         
-    return res
+    return res["ids"][0]
     # Example return object:
     # {'insert_count': 1, 'ids': ['459296023779213584']}
 
@@ -112,7 +112,7 @@ def isci_zapise(tekst: str):
     vector = embed_text(tekst)
     print("Vector size: " + str(vector.__len__()))
     res = milvus_client.search(collection_name=COLLECTION_NAME, data=[vector], limit=2, output_fields=["text", "id", "$meta", "user", "type"], filter="user == \"test\"")
-    return res[0]
+    return list(map(lambda entity : entity["entity"], res))
     # Example return (is list of list, $meta dynamic field will be split to its components):
     # [[
     #     {
