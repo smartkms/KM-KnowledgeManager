@@ -31,19 +31,22 @@ milvus_client = MilvusClient(uri=URI, token=TOKEN, db_name=DB_NAME)
 # TODO razsiri na vec zapisov z istimi metapodatki hkrati List(str) | str
 # TODO select outputfields to return, avoid vectors
 # TODO use source LIKE {source} for searching for grater flexibility
+# TODO rethink position
 
 # V2 APIs
-def store_data_v2(text : str, metadata : FileMetadata,  position : int = 0) -> List[str]:
-    embedding=embed_text(text)
-    entity = metadata.model_copy(
-        update={
-            "text" : text,
-            "embedding" : embedding,
-            "position" : position
-        },
-        deep=True
-    )
-    res = milvus_client.insert(collection_name=COLLECTION_NAME, data=entity.model_dump())
+def store_data_v2(chunks : List[str], metadata : FileMetadata) -> List[str]:
+    entities=[]
+    for chunk in chunks:
+        embedding=embed_text(chunk)
+        entity = metadata.model_copy(
+            update={
+                "text" : chunk,
+                "embedding" : embedding
+            },
+            deep=True
+        )
+        entities.append(entity.model_dump())
+    res = milvus_client.insert(collection_name=COLLECTION_NAME, data=entities)
     return res["ids"]
 
 # TODO add offset and limit
