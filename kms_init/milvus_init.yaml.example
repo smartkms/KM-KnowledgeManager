@@ -92,4 +92,4 @@ populate:
           skip_transform: true
           collection: data
           user: test
-          type: DOCUMENT
+          type: doc

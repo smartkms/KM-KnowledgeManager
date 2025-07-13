@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from kms-db!")
+MILVUS_PUBLIC_USER="public"

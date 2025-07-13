@@ -8,6 +8,3 @@ from typing import BinaryIO
 def convert_pdf(file: BinaryIO) -> str:
     return mupdf.to_markdown(file)
 
-# pdfile = open("c.pdf", mode="rb")
-# md = mupdf.to_markdown(pdfile)
-

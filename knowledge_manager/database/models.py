@@ -1,17 +1,21 @@
 from pydantic import BaseModel, ConfigDict, Field
-from typing import List, Optional
+from typing import List, Optional, Final
 from enum import Enum
 from numpy import float16
 
 # Optional: create enum file for storing enums and import them here if they are many
 class FileType:
-    MESSAGES="msg"
-    TEXT_DOCUMENT="txt"
-    TABLE="tbl"
-    DOCUMENT="doc"
+    MESSAGES : Final[str]="msg"
+    TEXT_DOCUMENT : Final[str]="txt"
+    TABLE : Final[str]="tbl"
+    DOCUMENT : Final[str]="doc"
+    JSON : Final[str]="json"
+
+    def list_types(self) -> List[str]:
+        return [self.MESSAGES, self.DOCUMENT, self.TABLE, self.TEXT_DOCUMENT, self.JSON]
 
 class FileMetadata (BaseModel):
-    model_config = ConfigDict(extra="allow") #allows extra fields (will be added to dynamic field in schema)
+    model_config = ConfigDict(extra="allow") #allows extra fields (will be added to dynamic field in db schema)
 
     user: str = "public"
     type: str = FileType.TEXT_DOCUMENT

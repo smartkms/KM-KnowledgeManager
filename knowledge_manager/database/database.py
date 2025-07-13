@@ -4,6 +4,7 @@ import os
 from pymilvus import MilvusClient
 from typing import List
 from .models import FileMetadata, FileType, BaseEntity
+from . import MILVUS_PUBLIC_USER
 
 use_local_db = False
 load_dotenv()
@@ -29,6 +30,7 @@ milvus_client = MilvusClient(uri=URI, token=TOKEN, db_name=DB_NAME)
 # TODO preveri, ali je vredno zapis shraniti (check insert funkcija), in kaj zbrisati
 # TODO razsiri na vec zapisov z istimi metapodatki hkrati List(str) | str
 # TODO select outputfields to return, avoid vectors
+# TODO use source LIKE {source} for searching for grater flexibility
 
 # V2 APIs
 def store_data_v2(text : str, metadata : FileMetadata,  position : int = 0) -> List[str]:
@@ -47,7 +49,7 @@ def store_data_v2(text : str, metadata : FileMetadata,  position : int = 0) -> L
 # TODO add offset and limit
 # TODO can erturn similarity to query vector, can implement something about it
 # adds user to filtering, user should be specified and validated in resource class
-def search_data_v2(query : str, type : FileType | None = None, source : str | None = None, user : str = "public") -> List[BaseEntity]:
+def search_data_v2(query : str, type : FileType | None = None, source : str | None = None, user : str = MILVUS_PUBLIC_USER) -> List[BaseEntity]:
     filter_expression_list = ["user == {user} "]
     filter_params = {
         "user" : user
@@ -65,7 +67,7 @@ def search_data_v2(query : str, type : FileType | None = None, source : str | No
 
 # searches only by scalar
 # TODO validate parameters (should not contain spaces)
-def query_data_v2(type : FileType | None = None, source : str | None = None, user : str = "public") -> List[BaseEntity]:
+def query_data_v2(type : FileType | None = None, source : str | None = None, user : str = MILVUS_PUBLIC_USER) -> List[BaseEntity]:
     filter_expression_list = ["user == {user} "]
     filter_params = {
         "user" : user
@@ -80,7 +82,8 @@ def query_data_v2(type : FileType | None = None, source : str | None = None, use
     res = milvus_client.query(collection_name=COLLECTION_NAME, output_fields=["*"], filter=filter_expression, filter_params=filter_params)
     return list(map(lambda entity : BaseEntity.model_validate(entity), res))
 
-def query_data_by_id_v2(ids : List[str], user : str = "public") -> List[BaseEntity]:
+# not using milvus get function to enable searching by user
+def query_data_by_id_v2(ids : List[str], user : str = MILVUS_PUBLIC_USER) -> List[BaseEntity]:
     filter_expression = "user == {user} AND id IN {ids}"
     filter_params = {
         "user" : user,
