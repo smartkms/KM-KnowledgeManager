@@ -1,4 +1,4 @@
-from .embedding_openai import embed_text
+from .embedding_openai import embed_text, embed_chunks
 from dotenv import load_dotenv
 import os
 from pymilvus import MilvusClient
@@ -35,9 +35,9 @@ milvus_client = MilvusClient(uri=URI, token=TOKEN, db_name=DB_NAME)
 
 # V2 APIs
 def store_data_v2(chunks : List[str], metadata : FileMetadata) -> List[str]:
+    embeddings = embed_chunks(chunks=chunks)
     entities=[]
-    for chunk in chunks:
-        embedding=embed_text(chunk)
+    for chunk, embedding in zip(chunks, embeddings):
         entity = metadata.model_copy(
             update={
                 "text" : chunk,

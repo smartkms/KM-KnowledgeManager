@@ -3,6 +3,7 @@
 # TODO raziskat kako OpeAI razdeli vecje dokumente v chunke
 
 from dotenv import load_dotenv
+from typing import List
 import os
 from langchain_openai import OpenAIEmbeddings
 
@@ -30,3 +31,7 @@ embeddings = OpenAIEmbeddings(
 # TODO dodati check tokenov, òe je text predolg, se sprozi exeption
 def embed_text(txt : str) :
     return embeddings.embed_query(txt)
+
+def embed_chunks(chunks: List[str]) -> List[List[str]]:
+    # set proper chunk size
+    return embeddings.embed_documents(texts=chunks)
