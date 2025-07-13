@@ -34,13 +34,17 @@ python3 init_db.py
 4. rename *.env.example* to *.env*
 5. run *docker compose up*
 
-Everything should be working now.
+Everything should be working now. Setup is complete if you see all three services working (rqworker,dataAPI,queryAPI):
+
+*rqworker   | 12:33:20 *** Listening on processing...*
+*query-api-1 | INFO: Application startup complete.*
+*data-api-1  | INFO: Application startup complete.*
 
 **DataApi**, is used to push new data to the database. It interfaces with the **collector**.
 
-**QueryApi** is used for searching through the database. It should interface with the **rag** service.
+**QueryApi** is used for searching through the database. It interfaces with the **rag** service.
 
-Bellow you will find test, to confirm that both query and data api are working. Make sure to replace the ports, with the ones in the .env file.
+Bellow you will find tests, to confirm that both query and data api are working. Make sure to replace the ports, with the ones in the .env file.
 
 ## Query API for RAG
 Sends queries to the Milvus database.
