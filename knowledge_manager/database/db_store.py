@@ -2,7 +2,7 @@ from typing import BinaryIO
 from fileProcessing.ms_reader import convert_ms
 from fileProcessing.pdf_reader import convert_pdf
 from fileProcessing.md_splitter import split_onlength
-from database.database import isci_zapise
+from database.database import isci_zapise,shrani_podatke
 
 ### Funkcija pretvori PDF format v Markdown
 ### File mora biti odprt v binarni obliki open(path, "rb")

@@ -9,8 +9,6 @@ In root directory create `.env` file. Declare the following variables:
 ```ini
 OPENAI_API_KEY=my-secret-key
 VECTOR_DB_URI=http://localhost:19530
-VECTOR_DB_TOKEN=root:Milvus
-VECTOR_DB_NAME=km
 ```
 ### Local docker instance of milvus
 From root of project:

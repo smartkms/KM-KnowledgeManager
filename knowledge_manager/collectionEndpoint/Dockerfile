@@ -15,11 +15,11 @@ COPY collectionEndpoint/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the FastAPI app and worker files
-COPY common/ ./common/
-COPY fileProcessing/ ./fileProcessing/
-COPY collectionEndpoint/bouncer.py ./collectionEndpoint/
-COPY database/ ./database/
-COPY dataAPI.py .
+COPY ../common/ ./common/
+COPY ../fileProcessing/ ./fileProcessing/
+COPY ../collectionEndpoint/ ./collectionEndpoint/
+COPY ../database/ ./database/
+COPY ../dataAPI.py .
 
 # Expose port for FastAPI
 EXPOSE 8000
