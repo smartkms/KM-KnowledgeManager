@@ -37,7 +37,9 @@ python3 init_db.py
 Everything should be working now. Setup is complete if you see all three services working (rqworker,dataAPI,queryAPI):
 
 *rqworker   | 12:33:20 *** Listening on processing...*
+
 *query-api-1 | INFO: Application startup complete.*
+
 *data-api-1  | INFO: Application startup complete.*
 
 **DataApi**, is used to push new data to the database. It interfaces with the **collector**.
