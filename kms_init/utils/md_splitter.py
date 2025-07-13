@@ -29,11 +29,12 @@ def splitfile(stream : BinaryIO, filename : str) -> list[str]:
     try:
         if extension == ".pdf":
             text = convert_pdf(stream)
-        elif extension in [".docx", ".xslx", ".pptx"]:
+        elif extension in [".docx", ".xlsx", ".pptx"]:
             text = convert_ms(stream)
         else: 
             text = stream.read().decode("utf-8")
+        return split_onlength(text=text)
     except Exception as e:
         # TODO better eror handling
         logger.error("Could not split file%s: %s", filename, e.__str__)
-    return split_onlength(text=text)
+        return []

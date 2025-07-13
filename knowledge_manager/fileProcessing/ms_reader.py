@@ -9,8 +9,3 @@ md = MarkItDown(enable_plugins=False) # Set to True to enable plugins
 def convert_ms(filestream : BinaryIO) -> str:
     return md.convert(filestream)
 
-# file = open("b.docx", mode="rb")
-# md = MarkItDown(enable_plugins=False) # Set to True to enable plugins
-# result = md.convert(file)
-# print(result.text_content)
-

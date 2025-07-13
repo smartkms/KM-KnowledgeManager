@@ -3,6 +3,7 @@
 # TODO raziskat kako OpeAI razdeli vecje dokumente v chunke
 
 from dotenv import load_dotenv
+from typing import List
 import os
 from langchain_openai import OpenAIEmbeddings
 
@@ -10,8 +11,7 @@ load_dotenv()
 if "OPENAI_API_KEY" not in os.environ:
     print("OPENAI_API_KEY variable is missing in .env file.")
 
-# Initialize the a specific Embeddings Model version
-# TODO bolje definirati parametre embedinga, trenutno je iybran samo tip (najcenejsi)
+# TODO bolje definirati parametre embedinga, trenutno je izbran samo tip (najcenejsi)
 # param check_embedding_ctx_length: bool = True
 # Whether to check the token length of inputs and automatically split inputs longer than embedding_ctx_length.
 # param dimensions: int | None = None
@@ -27,11 +27,11 @@ embeddings = OpenAIEmbeddings(
     dimensions=1024
 )
 
-# Tak zgledad zdaj funkcija za embedding, to 
+# Features
 # TODO dodati check tokenov, òe je text predolg, se sprozi exeption
 def embed_text(txt : str) :
     return embeddings.embed_query(txt)
 
-# Primer uporabe embeddinga, da se preveri, ali je model pravilno konfiguriran
-# vektor =  embed_text("Trst je naš!")
-# print(vektor)
+def embed_chunks(chunks: List[str]) -> List[List[str]]:
+    # set proper chunk size
+    return embeddings.embed_documents(texts=chunks)
