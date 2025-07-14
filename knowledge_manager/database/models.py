@@ -1,6 +1,6 @@
-from pydantic import BaseModel, ConfigDict, Field, auto
+from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional, Final
-from enum import Enum
+from enum import Enum, auto
 
 class DataType:
     MESSAGES : Final[str]="msg"
@@ -21,7 +21,7 @@ class FileMetadata (BaseModel):
     model_config = ConfigDict(extra="allow") #allows extra fields (will be added to dynamic field in db schema)
 
     user: str = "public"
-    type: str = DataType.TEXT_DOCUMENT
+    type: str = DataType.DOCUMENT
     # TODO add to schema as static field
     source: str = "unknown" # used to identify the source of the file for update and delete operation
     # should be in form platform|partition|filename

@@ -1,5 +1,5 @@
 import re
-from .models import FileType
+from .models import DataType
 
 class FieldValidationException (Exception):
     def __init__(self, field : str):
@@ -23,5 +23,5 @@ def validate_id(id : str) -> bool:
         raise FieldValidationException("id")
 
 def validate_type(type : str) :
-    if type not in FileType.list_types():
+    if type not in DataType.list_types():
         raise FieldValidationException("type")
