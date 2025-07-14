@@ -8,8 +8,9 @@ class DataType:
     DOCUMENT : Final[str]="doc"
     JSON : Final[str]="json"
 
-    def list_types(self) -> List[str]:
-        return [self.MESSAGES, self.DOCUMENT, self.TABLE, self.JSON]
+    @classmethod
+    def list_types(cls) -> List[str]:
+        return [cls.MESSAGES, cls.DOCUMENT, cls.TABLE, cls.JSON]
 
 class StoreFunctionType (Enum):
     MS_OFFICE = auto()

@@ -32,6 +32,7 @@ def filtered_search(
     user: str, 
     type: str | None = None, 
     source: str | None = None):
+
     output = query_v2(
         user=user,
         type=type,
