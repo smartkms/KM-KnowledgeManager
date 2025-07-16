@@ -3,7 +3,21 @@ Clone repo
 ``` bash
 git clone https://github.com/smartkms/KM-Knowledge-Manager
 ```
-## Initialization
+## Quick start up
+From root of project:
+1. Fill in required fields in *.env.example* if necessary
+2. Rename *.env.example* to *.env*
+3. Run *docker compose up -d*
+
+7 containers are established and the whole KM should be working. To see logs for individual services type:
+```bash
+docker compose logs -f "container_name" "container_name" ...
+```
+### Manual testing
+dataAPI: swagger UI on http://127.0.0.1:8000/docs
+queryAPI: swagger UI on http://127.0.0.1:8100/docs
+
+## DB initialization
 ### .env file
 In root directory create `.env` file. Declare the following variables:
 ```ini
@@ -18,7 +32,8 @@ docker compose up -d
 ```
 Milvus should be running on `localhost:19530`. User interface is on `localhost:9091/webui`.
 
-### Initialize and populate database
+### Populate database
+(This part is not necessary if testing just the queryAPI and dataAPI)
 In `kms_ini` folder rename `milvus_init.yaml.example` to `milvus_init.yaml`.
 From project root:
 ```bash
@@ -27,14 +42,14 @@ pip install -r requirements.txt
 python3 init_db.py
 ```
 
-## Run server with docker compose
-1. first run, intilize and populate the database(instructions above)
-2. move to folder knowledge_manager
-3. Fill in required fields in *.env.example*
-4. rename *.env.example* to *.env*
-5. run *docker compose up*
+## Run endpoints with docker compose
+1. First initialize the database (instructions above)
+2. Move to folder knowledge_manager
+3. Fill in required fields in *.env.example* if necessary
+4. Rename *.env.example* to *.env*
+5. Run *docker compose up*
 
-Everything should be working now. Setup is complete if you see all three services working (rqworker,dataAPI,queryAPI):
+Everything should be working now. Setup is complete if you see all three services working (rqworker, dataAPI, queryAPI):
 
 *rqworker   | 12:33:20 *** Listening on processing...*
 
@@ -42,11 +57,11 @@ Everything should be working now. Setup is complete if you see all three service
 
 *data-api-1  | INFO: Application startup complete.*
 
-**DataApi**, is used to push new data to the database. It interfaces with the **collector**.
+**dataAPI**, is used to push new data to the database. It interfaces with the **collector**.
 
-**QueryApi** is used for searching through the database. It interfaces with the **rag** service.
+**queryAPI** is used for searching through the database. It interfaces with the **RAG** service.
 
-Bellow you will find tests, to confirm that both query and data api are working. Make sure to replace the ports, with the ones in the .env file.
+Bellow are instructions to test each service in different ways.
 
 ## Query API for RAG
 Sends queries to the Milvus database.
@@ -94,9 +109,3 @@ Make sure you have Docker installed.
   *INFO:     127.0.0.1:56180 - "POST /KM/push HTTP/1.1" 200 OK*
   
   You can add your own JSON files that folow the same format and   name (exampleX.json), currently there are only 3 provided from   the Collector.
-
-## Usage
-### Database package
-The only methods for external use from database package are those defined and documented in db_service. All the other are for **internal use** only.
-
-Check `demo.py` to see examples of usage.

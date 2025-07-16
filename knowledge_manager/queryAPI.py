@@ -21,9 +21,10 @@ def similarity_search(request : QueryRequest):
     output = search_v2(
         search_str=request.context,
         user=request.user,
-        type=request.type,
+        type=request.type, #Valid types: msg,tbl,doc,json
         source=request.source
     )
+    print("Embedding search yield:", output)
     return {"result": output}
 
 @app.get("/KM/query")
@@ -35,9 +36,10 @@ def filtered_search(
 
     output = query_v2(
         user=user,
-        type=type,
+        type=type, #Valid types: msg,tbl,doc,json
         source=source
     )
+    print("Filtered search yield:", output)
     return {"result": output}
 
 @app.post("/KM/entity")
@@ -47,8 +49,10 @@ def search_by_id(request : EntityRequest):
         ids=request.ids,
         user=request.user
     )
+    print("ID search yield:", output)
     return {"result": output}
 
+#For manual testing
 """
 if __name__ == "__main__":
     import uvicorn

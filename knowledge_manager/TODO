@@ -1,5 +1,3 @@
-- update data api to use V2 functions
-- test the milvus connection with openai API key
-- update query api connection to milvus
+- test dataAPI and KM/search (queryAPI) connection with openai API key
 - add a frontend api implementation?
 - clean up read.me

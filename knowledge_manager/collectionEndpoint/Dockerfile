@@ -6,7 +6,8 @@ WORKDIR /app
 
 # Install system dependencies (e.g., for Redis)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev && \
+    libpq-dev \
+    ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy requirements.txt and install dependencies

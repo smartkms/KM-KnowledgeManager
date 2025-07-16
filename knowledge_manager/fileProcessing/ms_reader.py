@@ -7,5 +7,6 @@ from typing import BinaryIO
 ### Lahko interpretira pdf ampak za to raje uporabi pdf_reader funkcije, ker je md bolj kakovosten
 md = MarkItDown(enable_plugins=False) # Set to True to enable plugins
 def convert_ms(filestream : BinaryIO) -> str:
-    return md.convert(filestream)
+    output = md.convert(filestream)
+    return output.markdown
 
