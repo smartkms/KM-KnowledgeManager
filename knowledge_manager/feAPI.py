@@ -3,8 +3,8 @@ from fastapi import FastAPI, UploadFile, File, Form
 from pydantic import BaseModel
 from datetime import datetime
 from io import BytesIO
-from database.db_store import store_file_v2
-from database.models import StoreFunctionType
+#from database.db_store import store_file_v2
+#from database.models import StoreFunctionType
 
 app = FastAPI()
 
@@ -36,7 +36,7 @@ def send_chat(chat : ChatRequest):
                 "message_content": message.content,
             }
         txt_file = BytesIO(message.content.encode())
-        store_file_v2(txt_file, metadata, StoreFunctionType.PLAIN_TEXT)
+        #store_file_v2(txt_file, metadata, StoreFunctionType.PLAIN_TEXT)
 
 @app.post("/KM/saveFile")
 #Send files to Milvus for vectorization
@@ -60,14 +60,21 @@ async def send_file(
         }
 
     if fileType in [".docx", ".xlsx", ".pptx"]:
-        store_file_v2(file_stream,metadata,StoreFunctionType.MS_OFFICE)
+        print("msoffice DONE")
+        #store_file_v2(file_stream,metadata,StoreFunctionType.MS_OFFICE)
     elif fileType in [".pdf"]:
-        store_file_v2(file_stream,metadata,StoreFunctionType.PDF)
+        print("pdf DONE")
+        #store_file_v2(file_stream,metadata,StoreFunctionType.PDF)
     else:
         print("Error, unsupported file type.")
 
 
-#Uncomment this part and run feAPI.py for manual testing:
+#Uncomment the code block below and run feAPI.py for manual testing after creating a pytho env:
+#1.Move to knowledge_manager -> feEndpoint
+#2.Run 'python3 -m venv venv' and 'source venv/bin/activate'
+#3.Install requirements 'pip install -r requirements.txt'
+#4.Move to knoweldge_manager directory and run 'feAPI.py'
+#5.A swagger UI is established on "http://127.0.0.1:8000/docs"
 """
 if __name__ == "__main__":
     import uvicorn
