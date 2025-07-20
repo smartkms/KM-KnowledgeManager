@@ -1,3 +1,6 @@
 - test dataAPI and KM/search (queryAPI) connection with openai API key
-- add a frontend api implementation?
+- fix up storing whole chats/messages at once (feAPI,dataAPI)
+- add feAPI to docker
 - clean up read.me
+- add files size limit for file storing
+- implement more error handling

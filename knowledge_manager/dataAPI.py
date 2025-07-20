@@ -18,7 +18,7 @@ class User(BaseModel):
     displayName: str
 
 class Message(BaseModel):
-    createdDateTime: str
+    createdDateTime: datetime
     user: User
     body: str
 

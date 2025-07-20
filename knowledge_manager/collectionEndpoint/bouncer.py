@@ -17,9 +17,10 @@ def processData(data: dict):
         print(f"Encoding {len(output)} messages from {data['content']['channelId']}...")
         
         #Do we add all messages up or put each one through the store function?
+        #TODO fix this by not sending each message but the whole convo
         for message in output:
             metadata = {
-                #Maybe add channel and channel ID?
+                #Maybe add channel name and ID?
                 "user_id": message["user"]["id"],
                 "username": message["user"]["displayName"],
                 "created_date_time": message["createdDateTime"],
