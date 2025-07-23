@@ -10,17 +10,17 @@ WORKDIR /app
 #    rm -rf /var/lib/apt/lists/*
 
 # Copy requirements.txt and install dependencies
-COPY ragEndpoint/requirements.txt .
+COPY feEndpoint/requirements.txt .
 # RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy everything else
 COPY common/ ./common/
 COPY database/ ./database/
-COPY queryAPI.py .
+COPY feAPI.py .
 
 # Expose port for FastAPI
 EXPOSE 8000
 
 # Command to run FastAPI app
-CMD ["uvicorn", "queryAPI:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "feAPI:app", "--host", "0.0.0.0", "--port", "8000"]
