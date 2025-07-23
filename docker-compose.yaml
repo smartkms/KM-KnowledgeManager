@@ -119,6 +119,23 @@ services:
     extra_hosts:
       host.docker.internal: host-gateway  # refrences host machine
 
+  front-api:
+    build:
+      context: ./knowledge_manager/
+      dockerfile: feEndpoint/Dockerfile
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - VECTOR_DB_URI=${VECTOR_DB_URI}
+    ports:
+      - "${KM_FE_API_PORT}:8000"
+    extra_hosts:
+        host.docker.internal: host-gateway  # refrences host machine
+    depends_on:
+      - redis
+      - "etcd"
+      - "minio"
+      - "standalone"
+
 
 networks:
   default:
