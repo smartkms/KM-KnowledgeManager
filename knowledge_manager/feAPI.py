@@ -37,6 +37,7 @@ def send_chat(chat : ChatRequest):
             }
         txt_file = BytesIO(message.content.encode())
         #store_file_v2(txt_file, metadata, StoreFunctionType.PLAIN_TEXT)
+        print("chat DONE")
 
 @app.post("/KM/saveFile")
 #Send files to Milvus for vectorization
@@ -44,15 +45,20 @@ def send_chat(chat : ChatRequest):
 async def send_file(
     file: UploadFile = File(...), # <-- the actual file
     fileId: str = Form(...),
-    fileName: str = Form(...),
     createTime: datetime = Form(...),
     updateTime: datetime | None = Form(None)):
+
+    fileName = file.filename
+    fileType = os.path.splitext(fileName)[1].lower()
+
+    if not fileType:
+        print("Error, no file extension provided")
 
     print(f"Processing file {fileName}...")
 
     file_content = await file.read()
     file_stream = BytesIO(file_content)
-    fileType = os.path.splitext(fileName)[1].lower()
+    
     metadata = {
             "file_id": fileId,
             "file_name": fileName,
@@ -69,7 +75,7 @@ async def send_file(
         print("Error, unsupported file type.")
 
 
-#Uncomment the code block below and run feAPI.py for manual testing after creating a pytho env:
+#Uncomment the code block below and run feAPI.py for manual testing after creating a python env:
 #1.Move to knowledge_manager -> feEndpoint
 #2.Run 'python3 -m venv venv' and 'source venv/bin/activate'
 #3.Install requirements 'pip install -r requirements.txt'
